@@ -1,0 +1,85 @@
+# Если не передан пользователь, вводим его
+if [ "$user" == "" ]; then
+  echo -n 'User name: '
+  read user
+fi
+
+# Если не передано имя хоста, вводим с терминала
+if [ "$host" == "" ]; then
+  echo -n 'Host name: '
+  read host
+fi
+
+# Если такой хост уже существует
+if [ -f "data/hosts/$host" ]; then
+  echo This host already exists
+  exit 1
+fi
+
+# Если не переданы хосты-редиректы, генерируем один по умолчанию
+if [ "$redirects" == "" ]; then
+  if [ `echo "$host" | grep "www." | wc -l` == "1" ]; then
+    redirects=$(echo "$host" | sed -e 's|www\.||')
+  else
+    redirects="www.$host"
+  fi
+fi
+
+# Если не передана почта, формируем адрес по умолчанию
+if [ "$user_mail" == "" ]; then
+  user_mail="noreply@$host"
+fi
+
+# Создаём структуру каталогов
+get_user_home "$user"
+hostdir="$user_home$USER_SITES_DIR/$host"
+
+mkdir "$hostdir"
+chown "$WEBSERVER_USER:$user" "$hostdir"
+chmod 1150 "$hostdir"
+
+mkdir "$hostdir/conf"
+chown "root:$WEBSERVER_GROUP" "$hostdir/conf"
+chmod 0755 "$hostdir/conf"
+
+mkdir "$hostdir/htdocs"
+chown "$user:$WEBSERVER_GROUP" "$hostdir/htdocs"
+chmod 0710 "$hostdir/htdocs"
+
+mkdir "$hostdir/htdocs/www"
+chown "$user:$user" "$hostdir/htdocs/www"
+chmod 0755 "$hostdir/htdocs/www"
+echo "It works!" > "$hostdir/htdocs/www/index.html"
+chown "$user:$user" "$hostdir/htdocs/www/index.html"
+chmod 0644 "$hostdir/htdocs/www/index.html"
+
+mkdir "$hostdir/logs"
+chown "$WEBSERVER_USER:$user" "$hostdir/logs"
+chmod 1370 "$hostdir/logs"
+
+mkdir "$hostdir/logs/old"
+chown "$user:$user" "$hostdir/logs/old"
+chmod 0700 "$hostdir/logs/old"
+
+mkdir "$hostdir/tmp"
+chown "$WEBSERVER_USER:$user" "$hostdir/tmp"
+chmod 1330 "$hostdir/tmp"
+
+# Записываем информацию по хосту
+echo -n "$hostdir" > "data/hosts/$host"
+
+if [ "$aliases" != "" ]; then
+  for a in $aliases; do
+    echo -n "$host" > "data/aliases/$a"
+  done
+fi
+
+for a in $redirects; do
+  echo -n "$host" > "data/redirects/$a"
+done
+
+# Вызываем хуки
+srcmany modules/*/web_stop
+srcmany modules/*/addhost
+srcmany modules/*/web_start
+

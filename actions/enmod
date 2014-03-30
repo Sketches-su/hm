@@ -1,0 +1,16 @@
+if [ "$2" == "" ]; then
+  echo 'hm.sh enmod {module}'
+  exit 1
+fi
+
+if [ ! -d "modules.avail/$2" ]; then
+  echo Module not available
+  exit 1
+fi
+
+if [ -L "modules/$2" ]; then
+  echo Module already enabled
+  exit 1
+fi
+
+ln -s "../modules.avail/$2" "modules/$2"

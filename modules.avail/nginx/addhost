@@ -1,0 +1,20 @@
+nginx_aliases=${aliases:""}
+
+if [ "$nginx_aliases" != "" ]; then
+  nginx_aliases=" $nginx_aliases"
+fi
+
+nginx_tpl=${nginx_tpl:-nginx}
+
+cat templates/$nginx_tpl.conf \
+| sed \
+  -e "s|%%REDIRECTS%%|$redirects|g" \
+  -e "s|%%HOST%%|$host|g" \
+  -e "s|%%ALIASES%%|$nginx_aliases|g" \
+  -e "s|%%HOSTDIR%%|$hostdir|g" \
+  -e "s|%%FCGIPAR%%|$NGINX_FASTCGI_CONF|g" \
+  -e "s|%%PHPVER%%|$PHP5_DEFAULT_VER|g" \
+  > "$hostdir/conf/nginx.conf"
+chmod 0644 "$hostdir/conf/nginx.conf"
+chown root:$WEBSERVER_GROUP "$hostdir/conf/nginx.conf"
+

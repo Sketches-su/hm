@@ -1,0 +1,49 @@
+# Если не передан пользователь, вводим его
+if [ "$user" == "" ]; then
+  echo -n 'User name: '
+  read user
+fi
+
+# Если пользователь уже существует, выходим
+if [ "`cat /etc/passwd | cut -d':' -f1 | grep "$user" | wc -l`" == "1" ]; then
+  echo User already exists
+  exit 1
+fi
+
+# Если не передан шелл, используем умолчание
+user_shell=${user_shell:-$DEFAULT_SHELL}
+
+# Если не передан пароль, запрашиваем
+if [ "$password" == "" ]; then
+  echo -n 'User password (not displayed): '
+  read -s password
+  echo
+  echo -n 'Repeat please: '
+  read -s password2
+  
+  if [ "$password" != "$password2" ]; then
+    echo Passwords do not match
+    exit 1
+  fi
+fi
+
+# Шифруем пароль при помощи openssl
+cryptpass=$(openssl passwd "$password")
+
+# Создаём пользователя
+get_user_home "$user"
+useradd -c '' -d "$user_home" -m -p "$cryptpass" -s "$user_shell" -U "$user"
+chown "$user:$WEBSERVER_GROUP" "$user_home"
+chmod 0710 "$user_home"
+
+# Создаём каталог для сайтов
+if [ "$USER_SITES_DIR" != "" ]; then
+  sites_dir="$user_home$USER_SITES_DIR"
+  [ -d "$sites_dir" ] || mkdir "$sites_dir"
+  chmod 0150 "$sites_dir"
+  chown "$WEBSERVER_USER:$user" "$sites_dir"
+fi
+
+# Запускаем хуки
+srcmany modules/*/adduser
+

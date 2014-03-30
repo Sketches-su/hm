@@ -1,0 +1,35 @@
+# Если не передано имя хоста, вводим с терминала
+if [ "$host" == "" ]; then
+  echo -n 'Host name: '
+  read host
+fi
+
+# Если такой хост не существует
+if [ ! -f "data/hosts/$host" ]; then
+  echo Host does not exist
+  exit 1
+fi
+
+# Определяем каталог хоста
+hostdir=$(cat "data/hosts/$host")
+
+# Останавливаем хостинг
+srcmany modules/*/web_stop
+
+# Вызываем хуки
+srcmany modules/*/delhost
+
+# Удаляем каталог хоста
+rm -rf "$hostdir"
+
+# Удаляем сведения о хосте
+for a in data/aliases/* data/redirects/*; do
+  if [ -f "$a" ] && [ "`cat $a`" == "$host" ]; then
+    rm "$a"
+  fi
+done
+
+rm "data/hosts/$host"
+
+# Запускаем хостинг
+srcmany modules/*/web_start

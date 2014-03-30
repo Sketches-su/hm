@@ -1,0 +1,10 @@
+get_user_home()
+{
+  user_home=$USER_HOME_DIR/$1
+}
+
+USER_HOME_DIR=/home
+USER_SITES_DIR=/sites
+WEBSERVER_USER=www-data
+WEBSERVER_GROUP=www-data
+DEFAULT_SHELL=/usr/sbin/nologin

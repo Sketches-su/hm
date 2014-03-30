@@ -1,0 +1,5 @@
+VSFTPD_START_CMD="/etc/init.d/vsftpd start"
+VSFTPD_STOP_CMD="/etc/init.d/vsftpd stop"
+VSFTPD_USERS_CONF_FILE="/etc/vsftpd_users.conf"
+VSFTPD_USERS_CONF_DIR="/etc/vsftpd_users_conf"
+

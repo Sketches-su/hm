@@ -1,0 +1,8 @@
+$VSFTPD_STOP_CMD
+tmp=$(tempfile)
+cp "$VSFTPD_USERS_CONF_FILE" "$tmp"
+echo "$user" >> "$tmp"
+cat "$tmp" | sort | uniq > "$VSFTPD_USERS_CONF_FILE"
+rm "$tmp"
+echo "local_root=$sites_dir" > "$VSFTPD_USERS_CONF_DIR/$user"
+$VSFTPD_START_CMD

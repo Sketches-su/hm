@@ -1,0 +1,23 @@
+php_ver=${php_ver:-$PHP5_DEFAULT_VER}
+
+fpmpool=$(echo -n "$host" | md5sum | sed -e 's|[^a-f0-9]||g')
+fpmpool=${php_ver}_${fpmpool:0:8}
+
+fpm_tpl=${fpm_tpl:-${php_ver}-fpm}
+
+cat templates/$fpm_tpl.conf \
+| sed \
+  -e "s|%%USER%%|$user|g" \
+  -e "s|%%GROUP%%|$user|g" \
+  -e "s|%%WEB_USER%%|$WEBSERVER_USER|g" \
+  -e "s|%%WEB_GROUP%%|$WEBSERVER_GROUP|g" \
+  -e "s|%%HOSTDIR%%|$hostdir|g" \
+  -e "s|%%FPMPOOL%%|$fpmpool|g" \
+  -e "s|%%MAILER%%|$PHP5_MAILER|g" \
+  -e "s|%%USERMAIL%%|$user_mail|g" \
+  -e "s|%%PHPVER%%|$PHP5_DEFAULT_VER|g" \
+  > "$hostdir/conf/${php_ver}-fpm.conf"
+
+chmod 0640 "$hostdir/conf/${php_ver}-fpm.conf"
+chown root:$user "$hostdir/conf/${php_ver}-fpm.conf"
+

@@ -1,0 +1,11 @@
+if [ "$2" == "" ]; then
+  echo 'hm.sh dismod {module}'
+  exit 1
+fi
+
+if [ ! -L "modules/$2" ]; then
+  echo Module already disabled
+  exit 1
+fi
+
+rm "modules/$2"

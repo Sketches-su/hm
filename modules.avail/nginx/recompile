@@ -1,0 +1,1 @@
+cat $USER_HOME_DIR/*$USER_SITES_DIR/*/conf/nginx.conf > $NGINX_VHOSTS_FILE

@@ -1,0 +1,10 @@
+for a in $PHP5_VER_INSTALLED; do
+  outfile=$(echo "$PHP5_POOLS_FILE" | sed -e "s|$PHP5_DEFAULT_VER|$a|g")
+  
+#  if [ $(echo $USER_HOME_DIR/*$USER_SITES_DIR/*/conf/${a}-fpm.conf) != "$USER_HOME_DIR/*$USER_SITES_DIR/*/conf/$a-fpm.conf" ]; then
+    cat $USER_HOME_DIR/*$USER_SITES_DIR/*/conf/$a-fpm.conf > $outfile
+    chmod 0640 $outfile
+    chown root:$WEBSERVER_GROUP $outfile
+ # fi
+done
+

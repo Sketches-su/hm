@@ -1,0 +1,14 @@
+PHP5_INSTALL_PREFIX=/usr
+PHP5_VER_INSTALLED="php55"
+
+if [ "$php_version" != "" ]; then
+  PHP5_DEFAULT_VER="$php_version"
+else
+  PHP5_DEFAULT_VER="php55"
+fi
+
+PHP5_POOLS_FILE="/etc/php5/fpm/pool.d/hm_pools.conf"
+PHP5_START_CMD="/etc/init.d/php5-fpm start"
+PHP5_STOP_CMD="/etc/init.d/php5-fpm stop"
+PHP5_MAILER=/usr/sbin/sendmail
+

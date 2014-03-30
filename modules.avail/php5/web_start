@@ -1,0 +1,5 @@
+for a in $PHP5_VER_INSTALLED; do
+  cmd="`echo '$PHP5_START_CMD' | sed -e 's|$PHP5_DEFAULT_VER|$a|g'`"
+  $cmd
+done
+

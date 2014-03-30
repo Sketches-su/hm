@@ -1,0 +1,17 @@
+# Формируем строку команд для sed
+sed_rule='/^127\.0\.0\.1/{s| '
+sed_rule+=$(echo "$host" | sed -e 's/[.-]/\\./g')
+sed_rule+="||g;"
+
+for a in data/aliases/* data/redirects/*; do
+  if [ -f "$a" ] && [ "`cat $a`" == "$host" ]; then
+    d=$(basename "$a" | sed -e 's/[.-]/\\./g')
+    sed_rule+="s| $d||g;"
+  fi
+done
+
+sed_rule+='}'
+
+# Удаляем хосты из /etc/hosts
+sed -i -e "$sed_rule" "$HOSTS_FILE"
+
