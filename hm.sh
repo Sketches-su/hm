@@ -35,6 +35,10 @@ fi
 # Определяем действие
 if [ "$action" == "" ]; then
   if [ "$1" == "" ]; then
+    echo 'hm.sh enmod {module}'
+    echo '  Enables {module}. Make sure you have properly configured it before'
+    echo 'hm.sh dismod {module}'
+    echo '  Disables {module}'
     echo 'hm.sh {action}'
     echo '  Executes {action} in interactive mode'
     echo 'hm.sh source {file}'
