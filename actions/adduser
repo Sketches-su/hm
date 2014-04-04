@@ -28,7 +28,7 @@ if [ "$password" == "" ]; then
 fi
 
 # Шифруем пароль при помощи openssl
-cryptpass=$(openssl passwd "$password")
+cryptpass=$(openssl passwd -1 "$password")
 
 # Создаём пользователя
 get_user_home "$user"
