@@ -1,8 +1,7 @@
+!*.dummy
 actions/test
 config/*
 !config/*.example
 modules/*
-!modules/.*
 data/*/*
-!data/*/.*
 old
