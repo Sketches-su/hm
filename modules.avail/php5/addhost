@@ -20,4 +20,4 @@ cat templates/$fpm_tpl.conf \
 
 chmod 0640 "$hostdir/conf/${php_ver}-fpm.conf"
 chown root:$user "$hostdir/conf/${php_ver}-fpm.conf"
-
+. modules/php5/recompile

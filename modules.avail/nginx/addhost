@@ -19,4 +19,4 @@ cat templates/$nginx_tpl.conf \
   > "$hostdir/conf/nginx.conf"
 chmod 0644 "$hostdir/conf/nginx.conf"
 chown root:$WEBSERVER_GROUP "$hostdir/conf/nginx.conf"
-
+. modules/nginx/recompile
