@@ -3,6 +3,7 @@ get_user_home()
   user_home=$USER_HOME_DIR/$1
 }
 
+SERVER_IP=192.168.0.2
 USER_HOME_DIR=/home
 USER_SITES_DIR=/sites
 WEBSERVER_USER=www-data

@@ -1,4 +1,5 @@
 NGINX_VHOSTS_FILE="/etc/nginx/hm_vhosts.conf"
-NGINX_START_CMD="/etc/init.d/nginx start"
-NGINX_STOP_CMD="/etc/init.d/nginx stop"
+NGINX_START_CMD="service nginx start"
+NGINX_STOP_CMD="service nginx stop"
 NGINX_FASTCGI_CONF="/etc/nginx/fastcgi_params"
+NGINX_ERROR_PATH="/usr/share/nginx/html"

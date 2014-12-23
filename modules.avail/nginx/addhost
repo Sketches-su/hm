@@ -8,6 +8,8 @@ nginx_tpl=${nginx_tpl:-nginx}
 
 cat templates/$nginx_tpl.conf \
 | sed \
+  -e "s|%%SERVER_IP%%|$SERVER_IP|g" \
+  -e "s|%%ERRPATH%%|$NGINX_ERROR_PATH|g" \
   -e "s|%%REDIRECTS%%|$redirects|g" \
   -e "s|%%HOST%%|$host|g" \
   -e "s|%%ALIASES%%|$nginx_aliases|g" \
